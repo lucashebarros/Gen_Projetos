@@ -3,8 +3,8 @@
 const SUPABASE_URL = 'https://rprwkinapuwsdpiifrdl.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwcndraW5hcHV3c2RwaWlmcmRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMDQ4NjAsImV4cCI6MjA3Mzc4MDg2MH0.enGl5j313BI8cMxe6soGhViHd6667z8usxtJXPR2F9k';
 
-// O objeto global 'supabase' vem do script CDN
-const { createClient } = supabase; 
+// Inicializa o cliente Supabase usando o objeto global fornecido pelo CDN
+const { createClient } = supabase;
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // 2. Elemento da Tabela
@@ -17,14 +17,15 @@ async function carregarProjetos() {
     // Limpa a tabela e mostra mensagem de carregamento
     projectListTbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Carregando projetos...</td></tr>';
 
-    const { data: projetos, error } = await supabase
+    // Usa a variável corrigida 'supabaseClient'
+    const { data: projetos, error } = await supabaseClient
         .from('projetos')
         .select('*')
-        .order('created_at', { ascending: true }); // Ordena pelos mais antigos primeiro
+        .order('id', { ascending: true }); // Ordenar pelo ID pode ser mais estável
 
     if (error) {
         console.error('Erro ao buscar projetos:', error);
-        projectListTbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: red;">Erro ao carregar projetos.</td></tr>';
+        projectListTbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: red;">Erro ao carregar projetos. Verifique o console.</td></tr>';
         return;
     }
 
@@ -32,13 +33,15 @@ async function carregarProjetos() {
     projectListTbody.innerHTML = '';
 
     if (projetos.length === 0) {
-        projectListTbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Nenhum projeto encontrado.</td></tr>';
+        projectListTbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Nenhum projeto encontrado. Adicione um novo projeto no painel do Supabase para começar.</td></tr>';
         return;
     }
 
     // 3. Cria uma linha (<tr>) para cada projeto
     projetos.forEach(projeto => {
         const tr = document.createElement('tr');
+        // Adiciona um ID à linha para referência futura, se necessário
+        tr.dataset.projectId = projeto.id;
         tr.innerHTML = `
             <td>${projeto.nome}</td>
             
@@ -47,14 +50,14 @@ async function carregarProjetos() {
             </td>
 
             <td>
-                <input type="text" value="${projeto.prazo || ''}" onblur="atualizarCampo(${projeto.id}, 'prazo', this.value)" />
+                <input type="date" value="${projeto.prazo || ''}" onblur="atualizarCampo(${projeto.id}, 'prazo', this.value)" />
             </td>
 
             <td>
                 <select onchange="atualizarCampo(${projeto.id}, 'prioridade', this.value)">
-                    <option value="Alta Prioridade" ${projeto.prioridade === 'Alta Prioridade' ? 'selected' : ''}>Alta Prioridade</option>
-                    <option value="Média Prioridade" ${projeto.prioridade === 'Média Prioridade' ? 'selected' : ''}>Média Prioridade</option>
-                    <option value="Baixa Prioridade" ${projeto.prioridade === 'Baixa Prioridade' ? 'selected' : ''}>Baixa Prioridade</option>
+                    <option value="Alta" ${projeto.prioridade === 'Alta' ? 'selected' : ''}>Alta</option>
+                    <option value="Média" ${projeto.prioridade === 'Média' ? 'selected' : ''}>Média</option>
+                    <option value="Baixa" ${projeto.prioridade === 'Baixa' ? 'selected' : ''}>Baixa</option>
                     <option value="" ${!projeto.prioridade ? 'selected' : ''}>N/A</option>
                 </select>
             </td>
@@ -72,9 +75,10 @@ async function carregarProjetos() {
 async function atualizarCampo(id, coluna, valor) {
     console.log(`Atualizando projeto ${id}, coluna ${coluna} para: "${valor}"`);
 
-    const { error } = await supabase
+    // Usa a variável corrigida 'supabaseClient'
+    const { error } = await supabaseClient
         .from('projetos')
-        .update({ [coluna]: valor }) // Usamos [coluna] para definir a chave do objeto dinamicamente
+        .update({ [coluna]: valor }) // [coluna] define a chave do objeto dinamicamente
         .eq('id', id);
 
     if (error) {
@@ -82,9 +86,19 @@ async function atualizarCampo(id, coluna, valor) {
         alert('Falha ao salvar a alteração. Verifique o console para mais detalhes.');
     } else {
         console.log('Projeto atualizado com sucesso!');
-        // Poderíamos adicionar um feedback visual aqui, como um brilho verde na célula.
+        // Feedback visual: Adiciona uma classe temporária para indicar sucesso
+        const tr = document.querySelector(`tr[data-project-id='${id}']`);
+        if (tr) {
+            tr.style.backgroundColor = '#d4edda'; // Verde claro
+            setTimeout(() => {
+                tr.style.backgroundColor = ''; // Remove a cor após 1.5s
+            }, 1500);
+        }
     }
 }
+
+// 4. Carrega os projetos assim que a página estiver pronta
+document.addEventListener('DOMContentLoaded', carregarProjetos);
 
 // 4. Carrega os projetos assim que a página estiver pronta
 document.addEventListener('DOMContentLoaded', carregarProjetos);
