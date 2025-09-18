@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciador de Projetos</title>
     <link rel="icon" href="icon.png">
-    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,7 +12,6 @@
             padding: 0;
             background-color: #f9f9f9;
         }
-
         header {
             background-color: #57F572;
             color: rgb(0,0,0);
@@ -22,42 +20,48 @@
             text-align: center;
             font-size: 1.5rem;
         }
-
         header img {
             position: absolute;
             top: 0.5rem;
             left: 1rem;
             height: 50px;
         }
-
         main {
             padding: 2rem;
             max-width: 1000px;
             margin: auto;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             background-color: white;
         }
-
         th, td {
             padding: 1rem;
             text-align: left;
             border-bottom: 1px solid #ddd;
+            vertical-align: top; /* Melhora o alinhamento vertical */
         }
-
         th {
             background-color: #57F572;
             color: rgb(0,0,0);
         }
-
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-
+        /* Estilos para os campos editáveis */
+        td textarea, td input, td select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Garante que o padding não quebre o layout */
+        }
+        td textarea {
+            min-height: 80px; /* Altura mínima para o campo de situação */
+            resize: vertical;
+        }
         footer {
             text-align: center;
             padding: 1rem;
@@ -83,132 +87,9 @@
                     <th>Prioridade</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="project-list">
                 <tr>
-                    <td>BI de Faturamento</td>
-                    <td>Em correção dos valores Sem Frota (Rhitiere enviou e-mail ao Raul para ajustar na banco de dados)</td>
-                    <td></td>
-                    <td>Alta Prioridade</td>
-                </tr> 
-                <tr>
-                    <td>BI Abastecimento (Base TOTVs)</td>
-                    <td>Verificando os caminhos possíveis para acertar os processos.</td>
-                    <td>12/09</td>
-                    <td>Alta Prioridade</td>
-                </tr> 
-                <tr>
-                    <td>BI de Manutenção (DEIVID) </td>
-                    <td>Verificando instabilidades no Gateway</td>
-                    <td>11/09</td>
-                    <td>Média Prioridade</td>
-                </tr>  
-                <tr>
-                    <td>BI Recursos Humanos</td>
-                    <td>Inclusão de quantidade de horas extras no BI de folha, junto com a média de valores pagos por funcionário</td>
-                    <td>12/09</td>
-                    <td>Média Prioridade</td>
-                </tr> 
-                <tr>
-                    <td>BI Suprimentos</td>
-                    <td>Corrigindo duplicatas no Relatório de Notas Fiscais e ajuste de visual</td>
-                    <td>16/09</td>
-                    <td>Média Prioridade</td>
-                </tr>
-                <tr>
-                    <td>BI Contas a Pagar</td>
-                    <td>Verificando diferenças com comparativo do relatório do Protheus com a SE5.</td>
-                    <td>18/09</td>
-                    <td>Média Prioridade</td>
-                </tr>   
-                <tr>
-                    <td>BI Fiscal/Contabil</td>
-                    <td>Desenvolvendo Painel</td>
-                    <td>19/09</td>
-                    <td>Média Prioridade </td>
-                </tr>   
-                <tr>
-                    <td>BI Lubrificação</td>
-                    <td>Projeto Novo - Alinhamento com o Rogério (Bauru) planejado para o dia 18/09</td>
-                    <td></td>
-                    <td>Baixa Prioridade </td>
-                </tr>
-                
-                <tr>
-                    <td>Automatização Rodnei</td>
-                    <td>Não tem o código fonte e o ajuste não funcionou, pois a página em que faz download dos relatórios mudou sua estrutura</td>
-                </tr>
-                <tr>
-                    <td>Comparativo de Recolhimento de Notas</td>
-                    <td>Feito a automatização do relatório, Felipe irá marcar uma reunião para vermos os próximos passos.</td>
-                </tr>
-                <tr>
-                    <td>Cadastro Único (Agregados, Clientes e Veículos)</td>
-                    <td>
-                        Agregados: Foi colocado um novo campo na DA4 (Cadastro de Motorista) para identificar quem é agregado. <br>
-                        Clientes: Rodnei já faz esse cadastro do tomador.<br>
-                        Veículos: Luiz informou que está vendo com o Raul (AUCOM) uma forma para tirar todos os veículos antigos em lote.
-                    </td>
-                    <td>A definir</td>
-                    <td>Média Prioridade</td>
-                </tr>
-                <tr>
-                    <td>BI Borracharia</td>
-                    <td>Aguardando projeto da Aucom</td>
-                    <td>A definir</td>
-                    <td>Baixa Prioridade </td>
-                </tr>
-                <tr>
-                    <td>BI de Pátio</td>
-                    <td>Em desenvolvimento com time do Raul da GR.</td>
-                    <td>A definir</td>
-                    <td>Baixa Prioridade</td>
-                </tr>
-                <tr>
-                    <td>BI de Faturamento (Protheus)</td>
-                    <td>Aguardando entrada do contas a receber.</td>
-                    <td>A definir</td>
-                </tr>
-                <tr>
-                    <td>BI Estoque</td>
-                    <td>Aguardando a priorização para dar inicio e alinhar com Matheus.</td>
-                    <td>A definir</td>
-                </tr>
-                <tr>
-                    <td>BI de Agregado</td>
-                    <td>Aguardando evolução no Totvs (Agus x Clóvis).</td>
-                    <td>A definir</td>
-                </tr>
-                <tr>
-                    <td>BI de Controladoria</td>
-                    <td>Em funcionamento.</td>
-                    <td></td>
-                    <td>Média Prioridade</td>
-                </tr>  
-                <tr>
-                    <td>Integrações API - GR</td>
-                    <td>Todas as API integradas.</td>
-                    <td></td>
-                    <td>Baixa Prioridade</td>
-                </tr> 
-                <tr>
-                    <td>Portal de BI</td>
-                    <td>Configurado e Operando.</td>
-                    <td>Concluído</td>
-                </tr>
-                <tr>
-                    <td>BI de Odômetro</td>
-                    <td>Entregue e funcionando.</td>
-                    <td>Concluído</td>
-                </tr>
-                <tr>
-                    <td>BI de Abastecimento (Base Excel)</td>
-                    <td>Entregue ao time de Abastecimento.</td>
-                    <td>Concluído</td>
-                </tr>
-                <tr>
-                    <td>BI WTMH (Thompson)</td>
-                    <td>Entregue e funcionando.</td>
-                    <td>Concluído</td>
+                    <td colspan="4" style="text-align: center;">Carregando projetos...</td>
                 </tr>
             </tbody>
         </table>
@@ -217,14 +98,9 @@
     <footer>
         Suporte BI &copy; 2024
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
