@@ -3,7 +3,9 @@
 const SUPABASE_URL = 'https://rprwkinapuwsdpiifrdl.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwcndraW5hcHV3c2RwaWlmcmRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMDQ4NjAsImV4cCI6MjA3Mzc4MDg2MH0.enGl5j313BI8cMxe6soGhViHd6667z8usxtJXPR2F9k';
 
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// O objeto global 'supabase' vem do script CDN
+const { createClient } = supabase; 
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // 2. Elemento da Tabela
 const projectListTbody = document.getElementById('project-list');
